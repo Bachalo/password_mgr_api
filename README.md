@@ -7,9 +7,9 @@
 
 
 todo List
- - [] Adding new passwords 
- - [] Removing passwords
- - [] Editing passowords
+ - [DONE] Adding new passwords 
+ - [DONE] Removing passwords
+ - [DONE] Editing passowords
  - [] Make sure to make this api as secure as possible
 
 
