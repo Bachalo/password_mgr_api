@@ -1,7 +1,7 @@
 from fastapi import  FastAPI, Request
 from fastapi.responses import RedirectResponse
 from database import Database
-from models import UserInfo, LoginInfo, NewPassInfo
+from models import UserInfo, LoginInfo, NewPassInfo, EditPassInfo
 
 app = FastAPI()
 
@@ -14,31 +14,35 @@ async def index():
 
 @app.post("/register")
 def register(userInfo: UserInfo):
-    db.register(userInfo.name, userInfo.email, userInfo.password)
-    return {"register": "me"}
+    message = db.register(userInfo.name, userInfo.email, userInfo.password)
+    return {"Message": message}
 
 @app.post("/login")
 def login(loginInfo: LoginInfo, request:Request):
     client_ip = request.client.host
-    db.login(loginInfo.email, loginInfo.password, client_ip)
-    return {"hello": client_ip}
+    message = db.login(loginInfo.email, loginInfo.password, client_ip)
+    return {"Message": message}
 
 @app.post("/logout")
 def logout(request: Request):
     client_ip = request.client.host
-    db.logout(client_ip)
-    return {"logout": client_ip}
+    message = db.logout(client_ip)
+    return {"Message": message}
 
 @app.post("/add")
-def add(newPassInfo: NewPassInfo,request: Request):
+def add(newPassInfo: NewPassInfo, request: Request):
     client_ip = request.client.host
-    db.add(newPassInfo.password, newPassInfo.email, newPassInfo.url, client_ip)
-    return {"add": "me"}
+    message = db.add(newPassInfo.password, newPassInfo.email, newPassInfo.url_address, client_ip)
+    return {"Message": message}
 
 @app.post("/remove")
-def remove():
-    return {"remove": "me"}
+def remove(newPassInfo: NewPassInfo, request: Request):
+    client_ip = request.client.host
+    message = db.remove(newPassInfo.password, newPassInfo.email, newPassInfo.url_address, client_ip)
+    return {"Message": message}
 
 @app.post("/edit")
-def edit():
-    return {"edit": "me"}
+def edit(editPassInfo: EditPassInfo, request: Request):
+    client_ip = request.client.host
+    message = db.edit(editPassInfo.url_address, editPassInfo.email, editPassInfo.password, editPassInfo.valueToChange, editPassInfo.newValue, client_ip)
+    return {"Message": message}

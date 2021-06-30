@@ -14,4 +14,11 @@ class LoginInfo(BaseModel):
 class NewPassInfo(BaseModel):
     password: str
     email: str
-    url: str
+    url_address: str
+
+class EditPassInfo(BaseModel):
+    url_address: str
+    email: str
+    password: str
+    valueToChange: str
+    newValue: str
