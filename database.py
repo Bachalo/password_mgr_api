@@ -89,7 +89,8 @@ class Database:
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
             cur.execute("DELETE FROM LoggedInDeveices WHERE ipadress=?" ,(ip_address,))
-
+            
+            return "succesful"
 
 
     def add(self, password, email, url_address, ip_address):
