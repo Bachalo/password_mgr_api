@@ -21,7 +21,6 @@ class Database:
             cur.execute(Q3)
 
             
-
     
     def register(self, name, email, password):
             hashed_password = Hasher.hash_password(password)
@@ -44,12 +43,15 @@ class Database:
                 else:
                     return message
 
+
+
     def login(self,email,password, ip_address):
             with sqlite3.connect(self.dbname) as con:
                 cur = con.cursor()
                 cur.execute("SELECT * FROM Users WHERE email=?", (email,))
                 row = cur.fetchone()
                 print(row)
+
                 if row==None:
                     message="User does not exist please register"
                 else:
@@ -64,7 +66,7 @@ class Database:
                             cur.execute(Q1, (ip_address, row[1]))
 
                             result = cur.fetchall()
-                            # print (result)
+                            
                             if  len(result)==0:
                                 cur.execute("INSERT INTO LoggedInDeveices (ipadress, relation) VALUES (?, ?)", (ip_address, row[1]))
                                 message=""
@@ -88,6 +90,8 @@ class Database:
             cur = con.cursor()
             cur.execute("DELETE FROM LoggedInDeveices WHERE ipadress=?" ,(ip_address,))
 
+
+
     def add(self, password, email, url_address, ip_address):
             with sqlite3.connect(self.dbname) as con:
                 cur = con.cursor()
@@ -106,6 +110,7 @@ class Database:
                     message = ""
                 else:
                     message= "Password already exists in table"
+
                 if len(message)==0:
                     pass
                 else:
@@ -119,6 +124,7 @@ class Database:
             row = getUsername(cur, ip_address)
             print(row)
             relation = row[2]
+
             if len(relation)==0:
                 message = "Please log in"
             else:
@@ -126,6 +132,7 @@ class Database:
                 cur.execute(Q2, (email, url_address, password, relation))
                 result = cur.fetchall()
                 print(result)
+
                 if len(result)==0:
                     message = "Password does not exist in database"
                 else:
@@ -137,18 +144,22 @@ class Database:
                 pass
             else:
                 return message
+    
+
 
     def edit(self, url_address, email, password, valueToChange, newValue, ip_address):
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
             row = getUsername(cur, ip_address)
             relation = row[2]
+
             if len(relation)==0:
                 message = "Please log in"
             else:
                 Q1 = "SELECT * FROM Passwords WHERE (email=? and url=? and password=? and relation=?)"
                 cur.execute(Q1, (email, url_address, password, relation))
                 result = cur.fetchall()
+
                 if len(result)==0:
                     message="Password does not exist in database"
                 else:
@@ -158,6 +169,25 @@ class Database:
         
             if len(message)==0:
                 pass
+            else:
+                return message
+    
+    def search(self, variable_name, ip_address):
+        with sqlite3.connect(self.dbname) as con:
+            cur = con.cursor()
+            row = getUsername(cur, ip_address)
+            relation = row[2]
+
+            if len(relation)==0:
+                message = "Please log in"
+            else:
+                Q1 = "SELECT * FROM Passwords WHERE (email=? OR url=? OR password=?)"
+                cur.execute(Q1, (variable_name, variable_name, variable_name))
+                data = cur.fetchall()
+                message=""
+            
+            if len(message)==0:
+                return data
             else:
                 return message
 

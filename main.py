@@ -1,9 +1,22 @@
 from fastapi import  FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from database import Database
-from models import UserInfo, LoginInfo, NewPassInfo, EditPassInfo
+from models import UserInfo, LoginInfo, NewPassInfo, EditPassInfo, SearchPassInfo
 
 app = FastAPI()
+
+# SHIT TO ALLOW CORS
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 db = Database("sql_database.db")
 db.__init__(dbname="sql_database.db")
@@ -45,4 +58,10 @@ def remove(newPassInfo: NewPassInfo, request: Request):
 def edit(editPassInfo: EditPassInfo, request: Request):
     client_ip = request.client.host
     message = db.edit(editPassInfo.url_address, editPassInfo.email, editPassInfo.password, editPassInfo.valueToChange, editPassInfo.newValue, client_ip)
+    return {"Message": message}
+
+@app.post("/search")
+def search(searchPassInfo: SearchPassInfo, request: Request):
+    client_ip = request.client.host
+    message = db.search(searchPassInfo.searchTerm, client_ip)
     return {"Message": message}

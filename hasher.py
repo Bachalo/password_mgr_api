@@ -29,5 +29,3 @@ class Hasher():
             return True
         else:
             return False
-        
-        

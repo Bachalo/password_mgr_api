@@ -7,11 +7,11 @@
 
 
 todo List
- - [DONE] Adding new passwords 
- - [DONE] Removing passwords
- - [DONE] Editing passowords
- - [] Make sure to make this api as secure as possible
-
+ - [DONE] Adding new passwords. 
+ - [DONE] Removing passwords.
+ - [DONE] Editing passowords.
+ - [] Make sure to make this api as secure as possible.
+ - [DONE] List users passwords for specified variable.
 
 Warnings:
 - Remember to not delete any files it bugs with heroku and it shows different error about buildpacks

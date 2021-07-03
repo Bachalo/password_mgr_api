@@ -22,3 +22,6 @@ class EditPassInfo(BaseModel):
     password: str
     valueToChange: str
     newValue: str
+
+class SearchPassInfo(BaseModel):
+    searchTerm: str
