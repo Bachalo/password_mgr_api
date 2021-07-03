@@ -79,7 +79,7 @@ class Database:
                         message= "The email is incorrect"
                 
                 if len(message)==0:
-                    pass
+                    return ""
                 else:
                     return message
                 
