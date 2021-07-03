@@ -39,7 +39,7 @@ class Database:
                     message="Email and/or name already taken"
 
                 if len(message)==0:
-                    pass
+                    return "succesful"
                 else:
                     return message
 
@@ -79,7 +79,7 @@ class Database:
                         message= "The email is incorrect"
                 
                 if len(message)==0:
-                    return ""
+                    return "succesful"
                 else:
                     return message
                 
@@ -112,7 +112,7 @@ class Database:
                     message= "Password already exists in table"
 
                 if len(message)==0:
-                    pass
+                    return "succesful"
                 else:
                     return message
 
@@ -141,7 +141,7 @@ class Database:
                     cur.execute(sql, (email, url_address, password, relation))
             
             if len(message)==0:
-                pass
+                return "succesful"
             else:
                 return message
     
@@ -168,7 +168,7 @@ class Database:
                     cur.execute(sql, (newValue, email, url_address ,password, relation))
         
             if len(message)==0:
-                pass
+                return "succesful"
             else:
                 return message
     
