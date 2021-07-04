@@ -12,6 +12,7 @@ todo List
  - [DONE] Editing passowords.
  - [] Make sure to make this api as secure as possible.
  - [DONE] List users passwords for specified variable.
+ - [] Finish search endpoint.
 
 Warnings:
 - Remember to not delete any files it bugs with heroku and it shows different error about buildpacks

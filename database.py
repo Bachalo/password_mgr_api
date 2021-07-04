@@ -184,7 +184,15 @@ class Database:
             else:
                 Q1 = "SELECT * FROM Passwords WHERE (email=? OR url=? OR password=?)"
                 cur.execute(Q1, (variable_name, variable_name, variable_name))
-                data = cur.fetchall()
+                rows = cur.fetchall()
+                data = []
+                for row in rows:
+                    data.append({
+                        "id": row[0],
+                        "email": row[1],
+                        "url_address": row[2],
+                        "username": row[3],
+                    })
                 message=""
             
             if len(message)==0:

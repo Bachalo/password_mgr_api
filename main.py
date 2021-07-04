@@ -28,40 +28,40 @@ async def index():
 @app.post("/register")
 def register(userInfo: UserInfo):
     message = db.register(userInfo.name, userInfo.email, userInfo.password)
-    return {"Message": message}
+    return {"Response": message}
 
 @app.post("/login")
 def login(loginInfo: LoginInfo, request:Request):
     client_ip = request.client.host
     message = db.login(loginInfo.email, loginInfo.password, client_ip)
-    return {"Message": message}
+    return {"Response": message}
 
 @app.post("/logout")
 def logout(request: Request):
     client_ip = request.client.host
     message = db.logout(client_ip)
-    return {"Message": message}
+    return {"Response": message}
 
 @app.post("/add")
 def add(newPassInfo: NewPassInfo, request: Request):
     client_ip = request.client.host
     message = db.add(newPassInfo.password, newPassInfo.email, newPassInfo.url_address, client_ip)
-    return {"Message": message}
+    return {"Response": message}
 
 @app.post("/remove")
 def remove(newPassInfo: NewPassInfo, request: Request):
     client_ip = request.client.host
     message = db.remove(newPassInfo.password, newPassInfo.email, newPassInfo.url_address, client_ip)
-    return {"Message": message}
+    return {"Response": message}
 
 @app.post("/edit")
 def edit(editPassInfo: EditPassInfo, request: Request):
     client_ip = request.client.host
     message = db.edit(editPassInfo.url_address, editPassInfo.email, editPassInfo.password, editPassInfo.valueToChange, editPassInfo.newValue, client_ip)
-    return {"Message": message}
+    return {"Response": message}
 
 @app.post("/search")
 def search(searchPassInfo: SearchPassInfo, request: Request):
     client_ip = request.client.host
     message = db.search(searchPassInfo.searchTerm, client_ip)
-    return {"Message": message}
+    return {"Result": message}
