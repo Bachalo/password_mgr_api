@@ -12,7 +12,8 @@ todo List
  - [DONE] Editing passowords.
  - [] Make sure to make this api as secure as possible.
  - [DONE] List users passwords for specified variable.
- - [] Finish search endpoint.
+ - [DONE(I THINK)] Finish search endpoint.
+ - [DONE] Made search endpoint case insensitive (Means wheter u capitalize character or not it'll return either results).
 
 Warnings:
 - Remember to not delete any files it bugs with heroku and it shows different error about buildpacks

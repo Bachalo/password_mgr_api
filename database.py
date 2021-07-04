@@ -17,7 +17,7 @@ class Database:
             Q2 = """CREATE TABLE LoggedInDeveices (id INTEGER PRIMARY KEY AUTOINCREMENT,ipadress TEXT VARCHAR(50) ,relation int ,FOREIGN KEY(relation) REFERENCES Users(id))"""
             cur.execute(Q2)
 
-            Q3 = "CREATE TABLE Passwords (id INTEGER PRIMARY KEY AUTOINCREMENT, password VARCHAR(50), email VARCHAR(50), url VARCHAR(75), relation int, FOREIGN KEY(relation) REFERENCES Users(id)) "        
+            Q3 = "CREATE TABLE Passwords (id INTEGER PRIMARY KEY AUTOINCREMENT, password VARCHAR(50), email VARCHAR(50) COLLATE NOCASE, url VARCHAR(75) COLLATE NOCASE, relation int COLLATE NOCASE, FOREIGN KEY(relation) REFERENCES Users(id)) "        
             cur.execute(Q3)
 
             
