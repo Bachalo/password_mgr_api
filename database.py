@@ -183,7 +183,7 @@ class Database:
             else:
                 searchstr = '%'+variable_name+'%'
                 Q1 = "SELECT * FROM Passwords WHERE (email like ? OR url like ? OR password=?)"
-                cur.execute(Q1, (searchstr, searchstr, searchstr))
+                cur.execute(Q1, (searchstr, searchstr, variable_name))
                 rows = cur.fetchall()
                 data = []
                 for row in rows:

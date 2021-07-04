@@ -64,4 +64,4 @@ def edit(editPassInfo: EditPassInfo, request: Request):
 def search(searchPassInfo: SearchPassInfo, request: Request):
     client_ip = request.client.host
     message = db.search(searchPassInfo.searchTerm, client_ip)
-    return {"Result": message}
+    return message

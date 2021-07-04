@@ -1,5 +1,5 @@
 #
-
+from typing import List
 from pydantic import BaseModel
 
 class UserInfo(BaseModel):
@@ -25,3 +25,14 @@ class EditPassInfo(BaseModel):
 
 class SearchPassInfo(BaseModel):
     searchTerm: str
+
+
+class SearchResult(BaseModel):
+    id: int
+    password: str
+    email: str
+    url_address: str
+    username: str
+
+def process_searchResult_list(items: List[SearchResult]):
+    pass
