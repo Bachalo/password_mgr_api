@@ -176,22 +176,23 @@ class Database:
     def search(self, variable_name, ip_address):
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
-            row = getUsername(cur, ip_address)
-            relation = row[2]
-
-            if len(relation)==0:
+            query = getUsername(cur, ip_address)
+            
+            if query is None:
                 message = "Please log in"
             else:
-                Q1 = "SELECT * FROM Passwords WHERE (email=? OR url=? OR password=?)"
-                cur.execute(Q1, (variable_name, variable_name, variable_name))
+                searchstr = '%'+variable_name+'%'
+                Q1 = "SELECT * FROM Passwords WHERE (email like ? OR url like ? OR password=?)"
+                cur.execute(Q1, (searchstr, searchstr, searchstr))
                 rows = cur.fetchall()
                 data = []
                 for row in rows:
                     data.append({
                         "id": row[0],
-                        "email": row[1],
-                        "url_address": row[2],
-                        "username": row[3],
+                        "password": row[1],
+                        "email": row[2],
+                        "url_address": row[3],
+                        "username": row[4],
                     })
                 message=""
             
