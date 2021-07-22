@@ -12,9 +12,11 @@ class LoginInfo(BaseModel):
     password: str
 
 class NewPassInfo(BaseModel):
+    appName: str
     password: str
     email: str
     url_address: str
+    appTag: str
 
 class EditPassInfo(BaseModel):
     url_address: str

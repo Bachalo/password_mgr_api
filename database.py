@@ -1,5 +1,7 @@
 import sqlite3, os
 from hasher import Hasher
+from datetime import datetime
+
 
 class Database:
     def __init__(self, dbname):
@@ -17,7 +19,7 @@ class Database:
             Q2 = """CREATE TABLE LoggedInDeveices (id INTEGER PRIMARY KEY AUTOINCREMENT,ipadress TEXT VARCHAR(50) ,relation int ,FOREIGN KEY(relation) REFERENCES Users(id))"""
             cur.execute(Q2)
 
-            Q3 = "CREATE TABLE Passwords (id INTEGER PRIMARY KEY AUTOINCREMENT, password VARCHAR(50), email VARCHAR(50) COLLATE NOCASE, url VARCHAR(75) COLLATE NOCASE, relation int COLLATE NOCASE, FOREIGN KEY(relation) REFERENCES Users(id)) "        
+            Q3 = "CREATE TABLE Passwords (id INTEGER PRIMARY KEY AUTOINCREMENT, appName VARCHAR(20), password VARCHAR(50), email VARCHAR(50) COLLATE NOCASE, url VARCHAR(75) COLLATE NOCASE, appTag VARCHAR(20) COLLATE NOCASE, dateAdded VARCHAR(30) COLLATE NOCASE, relation int COLLATE NOCASE, FOREIGN KEY(relation) REFERENCES Users(id)) "        
             cur.execute(Q3)
 
             
@@ -93,7 +95,7 @@ class Database:
             return "succesful"
 
 
-    def add(self, password, email, url_address, ip_address):
+    def add(self,appName, password, email, url_address, appTag, ip_address):
             with sqlite3.connect(self.dbname) as con:
                 cur = con.cursor()
                 Q1 = "SELECT * FROM LoggedInDeveices WHERE ipadress=?"
@@ -106,8 +108,9 @@ class Database:
                 if len(result)==0:
                     print("Adding new password to table")
 
-                    sql = "INSERT INTO Passwords (password, email, url, relation) VALUES (?, ?, ?, ?)"
-                    cur.execute(sql, (password, email, url_address, row[2]))
+                    sql = "INSERT INTO Passwords (appName, password, email, url, appTag, dateAdded, relation) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                    dateAdded = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                    cur.execute(sql, (appName, password, email, url_address, appTag, dateAdded, row[2]))
                     message = ""
                 else:
                     message= "Password already exists in table"
@@ -182,17 +185,20 @@ class Database:
                 message = "Please log in"
             else:
                 searchstr = '%'+variable_name+'%'
-                Q1 = "SELECT * FROM Passwords WHERE (email like ? OR url like ? OR password=?)"
-                cur.execute(Q1, (searchstr, searchstr, variable_name))
+                Q1 = "SELECT * FROM Passwords WHERE (appName like ? OR email like ? OR url like ? OR appTag like ? OR password=?)"
+                cur.execute(Q1, (searchstr, searchstr, searchstr, searchstr, variable_name))
                 rows = cur.fetchall()
                 data = []
                 for row in rows:
                     data.append({
                         "id": row[0],
-                        "password": row[1],
-                        "email": row[2],
-                        "url_address": row[3],
-                        "username": row[4],
+                        "appNAme": row[1],
+                        "password": row[2],
+                        "email": row[3],
+                        "url_address": row[4],
+                        "appTag": row[5],
+                        "dateAdded": row[6],
+                        "username": row[7]
                     })
                 message=""
             

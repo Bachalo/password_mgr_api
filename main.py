@@ -45,7 +45,7 @@ def logout(request: Request):
 @app.post("/add")
 def add(newPassInfo: NewPassInfo, request: Request):
     client_ip = request.client.host
-    message = db.add(newPassInfo.password, newPassInfo.email, newPassInfo.url_address, client_ip)
+    message = db.add(newPassInfo.appName, newPassInfo.password, newPassInfo.email, newPassInfo.url_address, newPassInfo.appTag, client_ip)
     return {"Response": message}
 
 @app.post("/remove")
