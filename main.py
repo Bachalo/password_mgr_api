@@ -57,7 +57,7 @@ def remove(newPassInfo: NewPassInfo, request: Request):
 @app.post("/edit")
 def edit(editPassInfo: EditPassInfo, request: Request):
     client_ip = request.client.host
-    message = db.edit(editPassInfo.url_address, editPassInfo.email, editPassInfo.password, editPassInfo.valueToChange, editPassInfo.newValue, client_ip)
+    message = db.edit(editPassInfo.id , editPassInfo.oldPassInfo, editPassInfo.NewPassInfo, client_ip)
     return {"Response": message}
 
 @app.post("/search")

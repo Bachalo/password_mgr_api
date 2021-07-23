@@ -18,12 +18,17 @@ class NewPassInfo(BaseModel):
     url_address: str
     appTag: str
 
-class EditPassInfo(BaseModel):
-    url_address: str
-    email: str
+class OldPassInfo(BaseModel):
+    appName: str
     password: str
-    valueToChange: str
-    newValue: str
+    email: str
+    url_address: str
+    appTag: str
+
+class EditPassInfo(BaseModel):
+    id: int
+    oldPassInfo: OldPassInfo
+    NewPassInfo: NewPassInfo
 
 class SearchPassInfo(BaseModel):
     searchTerm: str

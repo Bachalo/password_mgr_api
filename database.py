@@ -151,25 +151,29 @@ class Database:
     
 
 
-    def edit(self, url_address, email, password, valueToChange, newValue, ip_address):
+    def edit(self, id, oldPassInfo, newPassInfo, ip_address):
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
             row = getUsername(cur, ip_address)
             relation = row[2]
 
+            print(oldPassInfo.email)
+
+
             if len(relation)==0:
                 message = "Please log in"
             else:
                 Q1 = "SELECT * FROM Passwords WHERE (email=? and url=? and password=? and relation=?)"
-                cur.execute(Q1, (email, url_address, password, relation))
+                cur.execute(Q1, (oldPassInfo.email, oldPassInfo.url_address, oldPassInfo.password, relation))
                 result = cur.fetchall()
 
                 if len(result)==0:
                     message="Password does not exist in database"
                 else:
                     message =""
-                    sql = "UPDATE Passwords SET "+valueToChange+" = ? WHERE (email=? and url=? and password=? and relation=?)"
-                    cur.execute(sql, (newValue, email, url_address ,password, relation))
+                    sql = "UPDATE Passwords SET appName=?, password=?, email=?, url=?, appTag=? WHERE (id=? and email=? and password=? AND url=?)"
+                    cur.execute(sql, (newPassInfo.appName, newPassInfo.password, newPassInfo.email, newPassInfo.url_address, newPassInfo.appTag, id, oldPassInfo.email, oldPassInfo.password, oldPassInfo.url_address))
+
         
             if len(message)==0:
                 return "succesful"
