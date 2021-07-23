@@ -222,10 +222,11 @@ class Database:
             else:
                 Q1 = "SELECT * FROM Passwords WHERE (id=?)"
                 cur.execute(Q1, (id,))
-                rows = cur.fetchall()
-                data = []
-                for row in rows:
-                    data.append({
+                row = cur.fetchone()
+                if row==None:
+                    message = "Password does not exist"
+                else:
+                    data = {
                         "id": row[0],
                         "appNAme": row[1],
                         "password": row[2],
@@ -234,8 +235,8 @@ class Database:
                         "appTag": row[5],
                         "dateAdded": row[6],
                         "username": row[7]
-                    })
-                message=""
+                    }
+                    message=""
             
             if len(message)==0:
                 return data
