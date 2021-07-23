@@ -33,6 +33,8 @@ class EditPassInfo(BaseModel):
 class SearchPassInfo(BaseModel):
     searchTerm: str
 
+class DetailsPassInfo(BaseModel):
+    searchId: int
 
 class SearchResult(BaseModel):
     id: int

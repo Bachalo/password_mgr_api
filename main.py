@@ -2,7 +2,7 @@ from fastapi import  FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from database import Database
-from models import UserInfo, LoginInfo, NewPassInfo, EditPassInfo, SearchPassInfo
+from models import DetailsPassInfo, UserInfo, LoginInfo, NewPassInfo, EditPassInfo, SearchPassInfo
 
 app = FastAPI()
 
@@ -64,4 +64,10 @@ def edit(editPassInfo: EditPassInfo, request: Request):
 def search(searchPassInfo: SearchPassInfo, request: Request):
     client_ip = request.client.host
     message = db.search(searchPassInfo.searchTerm, client_ip)
+    return message
+    
+@app.post("/getDetails")
+def getDetails(detailsPassInfo: DetailsPassInfo, request: Request):
+    client_ip = request.client.host
+    message = db.getDetails(detailsPassInfo.searchId, client_ip)
     return message

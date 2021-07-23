@@ -189,8 +189,8 @@ class Database:
                 message = "Please log in"
             else:
                 searchstr = '%'+variable_name+'%'
-                Q1 = "SELECT * FROM Passwords WHERE (appName like ? OR email like ? OR url like ? OR appTag like ? OR password=?)"
-                cur.execute(Q1, (searchstr, searchstr, searchstr, searchstr, variable_name))
+                Q1 = "SELECT * FROM Passwords WHERE (id like ? OR appName like ? OR email like ? OR url like ? OR appTag like ? OR password=?)"
+                cur.execute(Q1, (searchstr, searchstr, searchstr, searchstr, searchstr, variable_name))
                 rows = cur.fetchall()
                 data = []
                 for row in rows:
@@ -211,6 +211,36 @@ class Database:
             else:
                 return message
 
+
+    def getDetails(self, id, ip_address):
+        with sqlite3.connect(self.dbname) as con:
+            cur = con.cursor()
+            query = getUsername(cur, ip_address)
+            
+            if query is None:
+                message = "Please log in"
+            else:
+                Q1 = "SELECT * FROM Passwords WHERE (id=?)"
+                cur.execute(Q1, (id,))
+                rows = cur.fetchall()
+                data = []
+                for row in rows:
+                    data.append({
+                        "id": row[0],
+                        "appNAme": row[1],
+                        "password": row[2],
+                        "email": row[3],
+                        "url_address": row[4],
+                        "appTag": row[5],
+                        "dateAdded": row[6],
+                        "username": row[7]
+                    })
+                message=""
+            
+            if len(message)==0:
+                return data
+            else:
+                return message
 
 def getUsername(cur, ip_address):
     cur.execute("SELECT * FROM LoggedInDeveices WHERE ipadress=?", (ip_address,))
