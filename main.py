@@ -60,10 +60,10 @@ def edit(editPassInfo: EditPassInfo, request: Request):
     message = db.edit(editPassInfo.id , editPassInfo.oldPassInfo, editPassInfo.NewPassInfo, client_ip)
     return {"Response": message}
 
-@app.post("/search")
-def search(searchPassInfo: SearchPassInfo, request: Request):
+@app.get("/returnAll")
+def search(request: Request):
     client_ip = request.client.host
-    message = db.search(searchPassInfo.searchTerm, client_ip)
+    message = db.returnAll(client_ip)
     return message
     
 @app.post("/getDetails")

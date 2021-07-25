@@ -98,22 +98,24 @@ class Database:
     def add(self,appName, password, email, url_address, appTag, ip_address):
             with sqlite3.connect(self.dbname) as con:
                 cur = con.cursor()
-                Q1 = "SELECT * FROM LoggedInDeveices WHERE ipadress=?"
-                cur.execute(Q1, (ip_address,))
-                row = cur.fetchone()                
-                Q2 = "SELECT * FROM Passwords WHERE (email=? and url=?)"
-                cur.execute(Q2, (email, url_address))
-                result = cur.fetchall()
+                row = getUsername(cur, ip_address)
 
-                if len(result)==0:
-                    print("Adding new password to table")
-
-                    sql = "INSERT INTO Passwords (appName, password, email, url, appTag, dateAdded, relation) VALUES (?, ?, ?, ?, ?, ?, ?)"
-                    dateAdded = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                    cur.execute(sql, (appName, password, email, url_address, appTag, dateAdded, row[2]))
-                    message = ""
+                if row is None:
+                    message="Please log in"
                 else:
-                    message= "Password already exists in table"
+                    Q2 = "SELECT * FROM Passwords WHERE (email=? and url=?)"
+                    cur.execute(Q2, (email, url_address))
+                    result = cur.fetchall()
+
+                    if len(result)==0:
+                        print("Adding new password to table")
+
+                        sql = "INSERT INTO Passwords (appName, password, email, url, appTag, dateAdded, relation) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                        dateAdded = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                        cur.execute(sql, (appName, password, email, url_address, appTag, dateAdded, row[2]))
+                        message = ""
+                    else:
+                        message= "Password already exists in table"
 
                 if len(message)==0:
                     return "succesful"
@@ -126,14 +128,12 @@ class Database:
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
             row = getUsername(cur, ip_address)
-            print(row)
-            relation = row[2]
 
-            if len(relation)==0:
+            if row is None:
                 message = "Please log in"
             else:
                 Q2 = "SELECT * FROM Passwords WHERE (email=? and url=? and password=? and relation=?)"
-                cur.execute(Q2, (email, url_address, password, relation))
+                cur.execute(Q2, (email, url_address, password, row[2]))
                 result = cur.fetchall()
                 print(result)
 
@@ -142,7 +142,7 @@ class Database:
                 else:
                     message = ""
                     sql = "DELETE FROM Passwords WHERE (email=? and url=? and password=? and relation=?)"
-                    cur.execute(sql, (email, url_address, password, relation))
+                    cur.execute(sql, (email, url_address, password, row[2]))
             
             if len(message)==0:
                 return "succesful"
@@ -155,17 +155,16 @@ class Database:
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
             row = getUsername(cur, ip_address)
-            relation = row[2]
-
-            print(oldPassInfo.email)
+            
 
 
-            if len(relation)==0:
+            if row is None:
                 message = "Please log in"
             else:
-                Q1 = "SELECT * FROM Passwords WHERE (email=? and url=? and password=? and relation=?)"
-                cur.execute(Q1, (oldPassInfo.email, oldPassInfo.url_address, oldPassInfo.password, relation))
+                Q1 = "SELECT * FROM Passwords WHERE (id=? and email=? and url=? and password=? and relation=?)"
+                cur.execute(Q1, (id, oldPassInfo.email, oldPassInfo.url_address, oldPassInfo.password, row[2]))
                 result = cur.fetchall()
+                print(result)
 
                 if len(result)==0:
                     message="Password does not exist in database"
@@ -180,17 +179,21 @@ class Database:
             else:
                 return message
     
-    def search(self, variable_name, ip_address):
+    def returnAll(self, ip_address):
         with sqlite3.connect(self.dbname) as con:
             cur = con.cursor()
-            query = getUsername(cur, ip_address)
+            row = getUsername(cur, ip_address)
             
-            if query is None:
+
+            if row is None:
                 message = "Please log in"
             else:
-                searchstr = '%'+variable_name+'%'
-                Q1 = "SELECT * FROM Passwords WHERE (id like ? OR appName like ? OR email like ? OR url like ? OR appTag like ? OR password=?)"
-                cur.execute(Q1, (searchstr, searchstr, searchstr, searchstr, searchstr, variable_name))
+                # v2
+                Q2 = "SELECT * FROM Passwords WHERE relation=?"
+                cur.execute(Q2, (row[2],))
+                # searchstr = '%'+variable_name+'%'
+                # Q1 = "SELECT * FROM Passwords WHERE (id like ? OR appName like ? OR email like ? OR url like ? OR appTag like ? OR password=? AND relation=?)"
+                # cur.execute(Q1, (searchstr, searchstr, searchstr, searchstr, searchstr, variable_name, relation))
                 rows = cur.fetchall()
                 data = []
                 for row in rows:
@@ -209,7 +212,7 @@ class Database:
             if len(message)==0:
                 return data
             else:
-                return message
+                return {"Response":message}
 
 
     def getDetails(self, id, ip_address):
@@ -241,7 +244,7 @@ class Database:
             if len(message)==0:
                 return data
             else:
-                return message
+                return {"Response":message}
 
 def getUsername(cur, ip_address):
     cur.execute("SELECT * FROM LoggedInDeveices WHERE ipadress=?", (ip_address,))
