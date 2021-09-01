@@ -1,7 +1,7 @@
 
 # Password manager API
 
-Simple Python API used for my password manager.
+Super simple Python API used for my password manager.
 
  [Check it out](https://passwordmgrapi.herokuapp.com)
   (API is hosted on heroku might take a bit to spin up)
