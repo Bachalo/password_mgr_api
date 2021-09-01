@@ -1,12 +1,19 @@
-### API for my first extension
-- It's meant to be password manager.
-- Im making this api in python with fastapi and sqlite3 libraries.
-- Master passwords are hashed using sha256 and salted.
-- User can keep track of logged in deveices.
 
+# Password manager API
 
-todo List
- - [] Adding new passwords 
- - [] Removing passwords
- - [] Editing passowords
- - [] Make sure to make this api as secure as possible
+Simple Python API used for my password manager.
+
+ [Check it out](https://passwordmgrapi.herokuapp.com)
+  (API is hosted on heroku might take a bit to spin up)
+
+## Built with
+I built it with Python using these libraries:
+- FastApi
+- Sqlite3
+
+## Available endpoints
+
+![Endpoints](https://i.ibb.co/xHqbfnC/001.png)
+## Features
+- Passwords for newly registered users are hashed and salted using sha256.
+- Checks if user is logged in based on IP (This isn't probably the best solution).
